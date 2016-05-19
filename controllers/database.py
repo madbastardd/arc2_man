@@ -44,28 +44,50 @@ class DBConnection:
                                               PRIMARY KEY (`idteam`)
                                             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;""")
                 DBConnection.con.commit()
-                elif database == 'PSQL':
-					DBConnection.con = pdb.connect("dbname='template1' user='postgres' host='localhost' password='1111'")
-					DBConnection.cur = DBConnection.con.cursor()
+            elif database == 'PSQL':
+    					DBConnection.con = pdb.connect("dbname='template1' user='postgres' host='localhost' password='1111'")
+    					DBConnection.cur = DBConnection.con.cursor()
 
-					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS countries (
-											id SERIAL PRIMARY KEY,
-											name varchar(45) NOT NULL
-											);""")
-					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS games (
-											id SERIAL PRIMARY KEY,
-											country int NOT NULL,
-											first int NOT NULL,
-											second int NOT NULL,
-											firstres int NOT NULL,
-											secondres int NOT NULL,
-											playdate date NOT NULL
-											);""")
-					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS teams (
-											idteam SERIAL PRIMARY KEY,
-											name varchar(45) NOT NULL
-											)""")
-					DBConnection.con.commit()
+    					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS countries (
+    											id SERIAL PRIMARY KEY,
+    											name varchar(45) NOT NULL
+    											);""")
+    					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS games (
+    											id SERIAL PRIMARY KEY,
+    											country int NOT NULL,
+    											first int NOT NULL,
+    											second int NOT NULL,
+    											firstres int NOT NULL,
+    											secondres int NOT NULL,
+    											playdate date NOT NULL
+    											);""")
+    					DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS teams (
+    											idteam SERIAL PRIMARY KEY,
+    											name varchar(45) NOT NULL
+    											)""")
+    					DBConnection.con.commit()
+            elif database == 'sqlite':
+              DBConnection.con = sqlite3.connect('football.db')
+              DBConnection.cur = DBConnection.con.cursor()
+
+              DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS countries (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    name varchar(45) NOT NULL
+                                  );""")
+              DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS games (
+                                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            country int NOT NULL,
+                                            first int NOT NULL,
+                                            second int NOT NULL,
+                                            firstres int NOT NULL,
+                                            secondres int NOT NULL,
+                                            playdate date NOT NULL
+                                          );""")
+              DBConnection.cur.execute("""CREATE TABLE IF NOT EXISTS teams (
+                                            idteam INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            name varchar(45) NOT NULL
+                                          )""")
+              DBConnection.con.commit()
         except mdb.Error as e:
 
             print("Error %d: %s" % (e.args[0], e.args[1]))
